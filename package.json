@@ -1,9 +1,15 @@
 {
-  "engines": { "node" : ">=16" },
+  "engines": {
+    "node": ">=16"
+  },
   "name": "Github deployer",
   "version": "0.0.1",
   "private": true,
-  "dependencies": {},
+  "dependencies": {
+    "@octokit/rest": "^19.0.3",
+    "i": "^0.3.7",
+    "npm": "^8.16.0"
+  },
   "scripts": {
     "start": "node app.js"
   }
