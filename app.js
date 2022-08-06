@@ -6,6 +6,7 @@ var AWS = require('aws-sdk');
 var log = function(entry) {
     fs.appendFileSync('/tmp/sample-app.log', new Date().toISOString() + ' - ' + entry + '\n');
 };
+log = console.log;
 
 const GH = require('./lib/gh');
 const EB = require('./lib/eb');
@@ -71,7 +72,7 @@ var server = http.createServer(function (req, res) {
                 } catch (err) {
                     log(`Woops! Err: ${err.message}`);
                 }
-                //log('Received message: ' + body);
+                log('Received message: ' + body);
             } 
             /*
             else if (req.url = '/scheduled') {
