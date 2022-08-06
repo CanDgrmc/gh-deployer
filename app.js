@@ -6,7 +6,6 @@ var AWS = require('aws-sdk');
 var log = function(entry) {
     fs.appendFileSync('/tmp/sample-app.log', new Date().toISOString() + ' - ' + entry + '\n');
 };
-
 const GH = require('./lib/gh');
 const EB = require('./lib/eb');
 const Zip = require('./lib/zip');
