@@ -6,14 +6,10 @@
   "version": "0.0.1",
   "private": true,
   "dependencies": {
-    "@octokit/rest": "^19.0.3",
     "archiver": "^5.3.1",
     "elastic-beanstalk.js": "^1.0.1",
     "git-clone": "^0.2.0",
-    "i": "^0.3.7",
-    "jszip": "^3.10.1",
-    "npm": "^8.16.0",
-    "shelljs": "^0.8.5"
+    "npm": "^8.16.0"
   },
   "scripts": {
     "start": "node app.js"
