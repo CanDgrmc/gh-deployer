@@ -1,0 +1,10 @@
+{
+  "engines": { "node" : ">=16" },
+  "name": "Github deployer",
+  "version": "0.0.1",
+  "private": true,
+  "dependencies": {},
+  "scripts": {
+    "start": "node app.js"
+  }
+}
