@@ -19,7 +19,7 @@ if (!config) {
     throw new Error('environment config not found..');
 }
 
-const port = config.port;
+const port = process.env.PORT || config.port;
 
 AWS.config.apiVersions = {
     elasticbeanstalk: '2010-12-01',
