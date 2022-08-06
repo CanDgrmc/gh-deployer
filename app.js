@@ -44,30 +44,34 @@ var server = http.createServer(function (req, res) {
 
 
             if (req.url === '/') {
-                const bodyAsJson = JSON.parse(body);
-                const zip = new Zip({
-                    aws:AWS, log,
-                    s3Folder: config.repositoryAppMap[bodyAsJson.repository.name].s3Folder,
-                    bucket: config.bucket,
-                });
-                
-                const eb = new EB({
-                    app_name: config.repositoryAppMap[bodyAsJson.repository.name].appName,
-                    target_env: config.repositoryAppMap[bodyAsJson.repository.name].environments[env],
-                    log,
-                    aws: AWS,
-                    bucket: config.bucket,
-                });
-                const gh = new GH(bodyAsJson.repository, {log});
+                try {
+                    const bodyAsJson = JSON.parse(body);
+                    const zip = new Zip({
+                        aws:AWS, log,
+                        s3Folder: config.repositoryAppMap[bodyAsJson.repository.name].s3Folder,
+                        bucket: config.bucket,
+                    });
+                    
+                    const eb = new EB({
+                        app_name: config.repositoryAppMap[bodyAsJson.repository.name].appName,
+                        target_env: config.repositoryAppMap[bodyAsJson.repository.name].environments[env],
+                        log,
+                        aws: AWS,
+                        bucket: config.bucket,
+                    });
+                    const gh = new GH(bodyAsJson.repository, {log});
 
-                gh.clone().then(result => {
-                    zip.zipAndUpload().then(({label, key})=> {
+                    gh.clone().then(result => {
+                        zip.zipAndUpload().then(({label, key})=> {
 
-                        log('deploying...');
-                        
-                        eb.deploy(label, key).then(() => log('the end..'));
+                            log('deploying...');
+                            
+                            eb.deploy(label, key).then(() => log('the end..'));
+                        })
                     })
-                })
+                } catch (err) {
+                    log(`Woops! Err: ${err.message}`);
+                }
                 //log('Received message: ' + body);
             } 
             /*
@@ -80,7 +84,7 @@ var server = http.createServer(function (req, res) {
         });
     } else {
         res.writeHead(200);
-        res.write('Keep the gods out of it..');
+        res.send('Keep the gods out of it..');
         res.end();
     }
 });
