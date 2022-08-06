@@ -1,6 +1,7 @@
 const repositoryAppMap = {
     'gh-deployer': {
         appName: 'gh-deployer',
+        s3Folder: 'gh-deployer',
         environments: { 
             dev: 'gh-deployer-dev',
             prod: 'gh-deployer-prod',

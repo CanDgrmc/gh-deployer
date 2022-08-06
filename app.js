@@ -10,7 +10,7 @@ log = console.log;
 
 const GH = require('./lib/gh');
 const EB = require('./lib/eb');
-const Zip = new (require('./lib/zip'))(log);
+const Zip = require('./lib/zip');
 
 const env = process.env.NODE_ENV || 'dev';
 const config = require('./config')[env];
@@ -39,20 +39,33 @@ var server = http.createServer(function (req, res) {
         });
 
         req.on('end', function() {
+
+            
+
+
             if (req.url === '/') {
                 const bodyAsJson = JSON.parse(body);
+                const zip = new Zip({
+                    aws:AWS, log,
+                    s3Folder: config.repositoryAppMap[bodyAsJson.repository.name].s3Folder,
+                    bucket: config.bucket,
+                });
+                
+                const eb = new EB({
+                    app_name: config.repositoryAppMap[bodyAsJson.repository.name].appName,
+                    target_env: config.repositoryAppMap[bodyAsJson.repository.name].environments[env],
+                    log,
+                    aws: AWS,
+                    bucket: config.bucket,
+                });
                 const gh = new GH(bodyAsJson.repository, {log});
 
                 gh.clone().then(result => {
-                    Zip.zipAndUpload().then(({path,label, key})=> {
+                    zip.zipAndUpload().then(({label, key})=> {
 
                         log('deploying...');
-                        const eb = new EB({
-                            app_name: config.repositoryAppMap[bodyAsJson.repository.name].app_name,
-                            target_env: config.repositoryAppMap[bodyAsJson.repository.name].environments[env],
-                            log,
-                        });
-                        eb.deploy(path, label, key).then(() => log('the end..'));
+                        
+                        eb.deploy(label, key).then(() => log('the end..'));
                     })
                 })
                 //log('Received message: ' + body);
@@ -67,7 +80,7 @@ var server = http.createServer(function (req, res) {
         });
     } else {
         res.writeHead(200);
-        res.write(html);
+        res.write('Keep the gods out of it..');
         res.end();
     }
 });
