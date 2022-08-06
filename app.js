@@ -84,7 +84,7 @@ var server = http.createServer(function (req, res) {
         });
     } else {
         res.writeHead(200);
-        res.send('Keep the gods out of it..');
+        res.write(html);
         res.end();
     }
 });
