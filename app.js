@@ -11,7 +11,7 @@ const GH = require('./lib/gh');
 const EB = require('./lib/eb');
 const Zip = require('./lib/zip');
 
-const env = process.env.NODE_ENV || 'dev';
+const env = 'dev';
 const config = require('./config')[env];
 
 if (!config) {
